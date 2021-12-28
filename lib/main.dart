@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:relax_shop/providers/products.dart';
 
 import './styles/relax_app_style.dart';
 
@@ -14,10 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = RelaxAppStyle().theme;
-    return MaterialApp(
-      theme: theme,
-      debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Products>(
+          create: (ctx) => Products(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: theme,
+        debugShowCheckedModeBanner: false,
+        home: HomeScreen(),
+      ),
     );
   }
 }

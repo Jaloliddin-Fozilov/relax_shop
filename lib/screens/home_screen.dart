@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/products_grid.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -8,8 +10,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Relax"),
+        title: const Text("Relax shop"),
       ),
+      body: ProductsGrid(),
     );
   }
 }
