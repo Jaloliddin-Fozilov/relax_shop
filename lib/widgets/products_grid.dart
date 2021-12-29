@@ -13,13 +13,19 @@ class ProductsGrid extends StatelessWidget {
     final productsdata = Provider.of<Products>(context);
     final products = productsdata.list;
     return GridView.builder(
+      padding: const EdgeInsets.all(18),
       itemCount: products.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
-        childAspectRatio: 3 / 2,
+        childAspectRatio: 1.2,
+        mainAxisSpacing: 20,
+        crossAxisSpacing: 20,
       ),
       itemBuilder: (ctx, index) {
-        return Productitem();
+        return ChangeNotifierProvider.value(
+          value: products[index],
+          child: const ProductItem(),
+        );
       },
     );
   }

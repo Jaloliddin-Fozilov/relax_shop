@@ -5,6 +5,8 @@ import '../widgets/products_grid.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  static const routName = "/";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

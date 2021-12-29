@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:relax_shop/providers/products.dart';
+
+import './providers/products.dart';
 
 import './styles/relax_app_style.dart';
 
 import './screens/home_screen.dart';
+
+import './models/product.dart';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +29,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: theme,
         debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
+        initialRoute: '/',
+        routes: {
+          HomeScreen.routName: (ctx) => const HomeScreen(),
+        },
       ),
     );
   }
