@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/product_detail_screen.dart';
+
 import '../models/product.dart';
 
 class ProductItem extends StatelessWidget {
@@ -9,6 +11,19 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    void showDetailScreen() {
+      showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return ProductDetailScreen(
+            productId: product.id,
+          );
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -16,7 +31,7 @@ class ProductItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => showDetailScreen(),
         child: GridTile(
           child: Container(
             alignment: Alignment.topCenter,
