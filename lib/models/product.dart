@@ -22,4 +22,9 @@ class Product with ChangeNotifier {
     this.isNew = false,
     this.isFavorite = false,
   });
+
+  void toggleLike() {
+    isFavorite = !isFavorite;
+    notifyListeners();
+  }
 }

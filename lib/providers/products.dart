@@ -21,6 +21,7 @@ class Products with ChangeNotifier {
       price: 19.90,
       color: Colors.blueAccent,
       sale: 20,
+      isFavorite: false,
     ),
     Product(
       id: 'p3',
