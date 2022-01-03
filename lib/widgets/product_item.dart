@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
+
 import '../screens/product_detail_screen.dart';
 
 import '../models/product.dart';
@@ -11,6 +13,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     void showDetailScreen() {
       showModalBottomSheet(
         context: context,
@@ -127,7 +130,14 @@ class ProductItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    cart.addtoCart(
+                      product.id,
+                      product.title,
+                      product.imageUrl,
+                      product.price,
+                    );
+                  },
                   icon: const Icon(
                     Icons.add,
                     size: 20,

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:relax_shop/screens/product_detail_screen.dart';
 
 import './providers/products.dart';
+import './providers/cart.dart';
 
 import './styles/relax_app_style.dart';
 
 import './screens/home_screen.dart';
 
-import './models/product.dart';
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<Products>(
           create: (ctx) => Products(),
+        ),
+        ChangeNotifierProvider<Cart>(
+          create: (ctx) => Cart(),
         ),
       ],
       child: MaterialApp(

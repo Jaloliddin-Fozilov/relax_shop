@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './favorites_screen.dart';
 
 import '../widgets/products_grid.dart';
+import '../widgets/custom_cart.dart';
+
+import '../providers/cart.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -20,6 +26,16 @@ class HomeScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+          actions: [
+            Consumer<Cart>(
+              builder: (ctx, cart, child) {
+                return CustomCart(
+                  icon: Icons.shopping_bag_outlined,
+                  number: cart.itemsCount().toString(),
+                );
+              },
+            ),
+          ],
         ),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -28,7 +44,7 @@ class HomeScreen extends StatelessWidget {
                 backgroundColor: Colors.white,
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Text(
                       "Sevimli buyumingizni tanlang",
                       style: TextStyle(
@@ -49,7 +65,8 @@ class HomeScreen extends StatelessWidget {
           body: Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   color: Colors.grey[200],
@@ -76,7 +93,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const Expanded(
-                child: ProductsGrid(),
+                child: TabBarView(
+                  children: [
+                    ProductsGrid(),
+                    FavoritesScreen(),
+                  ],
+                ),
               ),
             ],
           ),

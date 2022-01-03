@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/products.dart';
+import '../providers/cart.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -19,6 +20,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final product = Provider.of<Products>(context, listen: false)
         .findById(widget.productId);
+    final cart = Provider.of<Cart>(context, listen: false);
 
     return Scaffold(
       body: Column(
@@ -199,7 +201,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       )
                     : ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          cart.addtoCart(
+                            product.id,
+                            product.title,
+                            product.imageUrl,
+                            product.price,
+                          );
+                        },
                         icon: const Icon(
                           Icons.shopping_bag_outlined,
                           size: 14,

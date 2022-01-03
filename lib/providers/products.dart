@@ -52,4 +52,8 @@ class Products with ChangeNotifier {
       (product) => product.id == productId,
     );
   }
+
+  List<Product> get favorites {
+    return _list.where((product) => product.isFavorite).toList();
+  }
 }
