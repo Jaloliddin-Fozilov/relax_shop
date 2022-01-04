@@ -7,6 +7,7 @@ import './providers/cart.dart';
 import './styles/relax_app_style.dart';
 
 import './screens/home_screen.dart';
+import './screens/cart_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           HomeScreen.routName: (ctx) => const HomeScreen(),
+          CartScreen.routName: (ctx) => const CartScreen(),
         },
       ),
     );

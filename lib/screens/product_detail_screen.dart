@@ -30,16 +30,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             height: 350,
             color: product.color,
             child: GridTile(
-              header: GridTileBar(
-                title: const SizedBox(),
-                trailing: IconButton(
-                  padding: const EdgeInsets.only(top: 50),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(
-                    Icons.arrow_drop_down_circle_rounded,
-                    size: 28,
+              header: Container(
+                margin: const EdgeInsets.only(top: 50),
+                child: GridTileBar(
+                  title: const SizedBox(),
+                  trailing: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_drop_down_circle_rounded,
+                      size: 28,
+                    ),
                   ),
                 ),
               ),

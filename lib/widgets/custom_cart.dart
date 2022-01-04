@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../screens/cart_screen.dart';
+
 class CustomCart extends StatelessWidget {
   final IconData icon;
   final String number;
@@ -14,7 +16,11 @@ class CustomCart extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        IconButton(onPressed: () {}, icon: Icon(icon)),
+        IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(CartScreen.routName);
+            },
+            icon: Icon(icon)),
         Positioned(
           top: 15,
           right: 12,
