@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class RelaxAppStyle {
   ThemeData theme = ThemeData(
-    primarySwatch: Colors.yellow,
+    primarySwatch: Colors.amber,
     fontFamily: GoogleFonts.rubik().fontFamily,
     scaffoldBackgroundColor: Colors.white,
   );
