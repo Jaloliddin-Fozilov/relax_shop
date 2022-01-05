@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
+import '../providers/orders.dart';
 
 import '../widgets/cart_list_item.dart';
 
@@ -15,7 +16,24 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text("Sizning savatchangiz"),
+          title: const Text(
+            "Savatcha",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => cart.removeItems(),
+              child: const Text(
+                "Tozalash",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +101,13 @@ class CartScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<Orders>(context, listen: false).addToOrders(
+                      cart.items.values.toList(),
+                      cart.totalPrice,
+                    );
+                    cart.removeItems();
+                  },
                   child: Text(
                     "Xarid qilish \$${cart.totalPrice.toStringAsFixed(2)}",
                     style: const TextStyle(

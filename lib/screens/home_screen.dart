@@ -5,6 +5,7 @@ import './favorites_screen.dart';
 
 import '../widgets/products_grid.dart';
 import '../widgets/custom_cart.dart';
+import '../widgets/app_drawer.dart';
 
 import '../providers/cart.dart';
 
@@ -37,10 +38,12 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
+        drawer: const AppDrawer(),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return [
               SliverAppBar(
+                automaticallyImplyLeading: false,
                 backgroundColor: Colors.white,
                 title: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
