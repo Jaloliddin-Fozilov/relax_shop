@@ -17,10 +17,12 @@ class CustomCart extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.routName);
-            },
-            icon: Icon(icon)),
+          onPressed: () {
+            Navigator.of(context).pushNamed(CartScreen.routName);
+          },
+          icon: Icon(icon),
+          splashRadius: 20,
+        ),
         Positioned(
           top: 15,
           right: 12,

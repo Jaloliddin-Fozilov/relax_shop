@@ -30,7 +30,7 @@ class ProductItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: product.color,
+        color: product.backgroundcolor,
         borderRadius: BorderRadius.circular(15),
       ),
       child: GestureDetector(
@@ -62,7 +62,7 @@ class ProductItem extends StatelessWidget {
                       child: Text(
                         "${product.sale}% chegirma",
                         style: TextStyle(
-                          color: product.color,
+                          color: product.backgroundcolor,
                         ),
                       ),
                     )
@@ -77,7 +77,7 @@ class ProductItem extends StatelessWidget {
                       child: Text(
                         "Yangi",
                         style: TextStyle(
-                          color: product.color,
+                          color: product.backgroundcolor,
                         ),
                       ),
                     )
@@ -136,6 +136,7 @@ class ProductItem extends StatelessWidget {
                       product.title,
                       product.imageUrl,
                       product.price,
+                      product.backgroundcolor,
                     );
                   },
                   icon: const Icon(

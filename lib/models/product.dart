@@ -6,7 +6,7 @@ class Product with ChangeNotifier {
   final String imageUrl;
   final String argument;
   final double price;
-  final Color color;
+  final Color backgroundcolor;
   int sale;
   bool isNew;
   bool isFavorite;
@@ -17,7 +17,7 @@ class Product with ChangeNotifier {
     required this.imageUrl,
     required this.argument,
     required this.price,
-    this.color = Colors.white,
+    this.backgroundcolor = Colors.white,
     this.sale = 0,
     this.isNew = false,
     this.isFavorite = false,

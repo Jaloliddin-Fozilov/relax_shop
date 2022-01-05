@@ -20,7 +20,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final product = Provider.of<Products>(context, listen: false)
         .findById(widget.productId);
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cart = Provider.of<Cart>(context);
 
     return Scaffold(
       body: Column(
@@ -28,7 +28,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Container(
             padding: const EdgeInsets.only(top: 15, bottom: 20),
             height: 350,
-            color: product.color,
+            color: product.backgroundcolor,
             child: GridTile(
               header: Container(
                 margin: const EdgeInsets.only(top: 50),
@@ -62,7 +62,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => cart.removeSingleItem(product.id),
                       icon: const Icon(
                         Icons.remove_circle,
                       ),
@@ -76,17 +76,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.white,
                       ),
-                      child: const Text(
-                        "1",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
+                      child: cart.items[product.id]!.quantity > 0
+                          ? Text(
+                              "${cart.items[product.id]!.quantity}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            )
+                          : const Text(
+                              "0",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () => cart.addtoCart(
+                        product.id,
+                        product.title,
+                        product.imageUrl,
+                        product.price,
+                        product.backgroundcolor,
+                      ),
                       icon: const Icon(
                         Icons.add_circle,
                       ),
@@ -98,7 +113,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
           Container(
-            color: product.color,
+            color: product.backgroundcolor,
             child: Container(
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -171,7 +186,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Umumiy narxi:",
+                    "Narxi:",
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 14,
@@ -209,6 +224,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             product.title,
                             product.imageUrl,
                             product.price,
+                            product.backgroundcolor,
                           );
                         },
                         icon: const Icon(

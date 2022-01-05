@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 
+import '../widgets/cart_list_item.dart';
+
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -22,6 +24,7 @@ class CartScreen extends StatelessWidget {
             right: 10,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 "Sizning buyurtmalaringiz",
@@ -33,7 +36,20 @@ class CartScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: ListView(),
+                child: ListView.builder(
+                  itemCount: cart.items.length,
+                  itemBuilder: (ctx, index) {
+                    final cartItem = cart.items.values.toList()[index];
+                    return CartListItem(
+                      productId: cart.items.keys.toList()[index],
+                      imageUrl: cartItem.imageUrl,
+                      title: cartItem.title,
+                      price: cartItem.price,
+                      quantity: cartItem.quantity,
+                      backgroundcolor: cartItem.backgroundcolor,
+                    );
+                  },
+                ),
               ),
             ],
           ),

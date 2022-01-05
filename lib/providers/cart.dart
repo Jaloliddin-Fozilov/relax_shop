@@ -26,6 +26,7 @@ class Cart with ChangeNotifier {
     String title,
     String imageUrl,
     double price,
+    Color backgroundcolor,
   ) {
     if (_items.containsKey(productId)) {
       _items.update(
@@ -36,6 +37,7 @@ class Cart with ChangeNotifier {
           quantity: currentProduct.quantity + 1,
           price: currentProduct.price,
           imageUrl: currentProduct.imageUrl,
+          backgroundcolor: currentProduct.backgroundcolor,
         ),
       );
     } else {
@@ -47,9 +49,30 @@ class Cart with ChangeNotifier {
           quantity: 1,
           price: price,
           imageUrl: imageUrl,
+          backgroundcolor: backgroundcolor,
         ),
       );
     }
     notifyListeners();
+  }
+
+  void removeSingleItem(String productId) {
+    if (!_items.containsKey(productId)) {
+      return;
+    }
+    if (_items[productId]!.quantity > 1) {
+      _items.update(
+        productId,
+        (currentProduct) => CartItem(
+          id: currentProduct.id,
+          title: currentProduct.title,
+          quantity: currentProduct.quantity - 1,
+          price: currentProduct.price,
+          imageUrl: currentProduct.imageUrl,
+          backgroundcolor: currentProduct.backgroundcolor,
+        ),
+      );
+      notifyListeners();
+    }
   }
 }
