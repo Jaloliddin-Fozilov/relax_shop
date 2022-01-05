@@ -21,6 +21,15 @@ class Cart with ChangeNotifier {
     return total;
   }
 
+  int quantityProduct(String productId) {
+    final isProductAdded = _items.containsKey(productId);
+    if (!isProductAdded) {
+      return 0;
+    } else {
+      return _items[productId]!.quantity;
+    }
+  }
+
   void addtoCart(
     String productId,
     String title,
@@ -74,5 +83,10 @@ class Cart with ChangeNotifier {
       );
       notifyListeners();
     }
+  }
+
+  void removeItem(String productId) {
+    _items.remove(productId);
+    notifyListeners();
   }
 }

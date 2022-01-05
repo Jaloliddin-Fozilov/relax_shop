@@ -17,16 +17,16 @@ class CartScreen extends StatelessWidget {
           centerTitle: true,
           title: const Text("Sizning savatchangiz"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
+              ),
+              child: Text(
                 "Sizning buyurtmalaringiz",
                 style: TextStyle(
                   color: Colors.black,
@@ -34,25 +34,25 @@ class CartScreen extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: cart.items.length,
-                  itemBuilder: (ctx, index) {
-                    final cartItem = cart.items.values.toList()[index];
-                    return CartListItem(
-                      productId: cart.items.keys.toList()[index],
-                      imageUrl: cartItem.imageUrl,
-                      title: cartItem.title,
-                      price: cartItem.price,
-                      quantity: cartItem.quantity,
-                      backgroundcolor: cartItem.backgroundcolor,
-                    );
-                  },
-                ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: cart.items.length,
+                itemBuilder: (ctx, index) {
+                  final cartItem = cart.items.values.toList()[index];
+                  return CartListItem(
+                    productId: cart.items.keys.toList()[index],
+                    imageUrl: cartItem.imageUrl,
+                    title: cartItem.title,
+                    price: cartItem.price,
+                    quantity: cartItem.quantity,
+                    backgroundcolor: cartItem.backgroundcolor,
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         bottomSheet: BottomAppBar(
           child: Container(

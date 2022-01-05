@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../providers/products.dart';
 import '../providers/cart.dart';
 
+import '/screens/cart_screen.dart';
+
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
   const ProductDetailScreen({
@@ -18,8 +20,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Products>(context, listen: false)
-        .findById(widget.productId);
+    final product = Provider.of<Products>(context).findById(widget.productId);
     final cart = Provider.of<Cart>(context);
 
     return Scaffold(
@@ -76,23 +77,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         borderRadius: BorderRadius.circular(5),
                         color: Colors.white,
                       ),
-                      child: cart.items[product.id]!.quantity > 0
-                          ? Text(
-                              "${cart.items[product.id]!.quantity}",
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            )
-                          : const Text(
-                              "0",
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
+                      child: Text(
+                        "${cart.quantityProduct(product.id)}",
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                     IconButton(
                       onPressed: () => cart.addtoCart(
@@ -167,7 +159,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         fontSize: 12,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -203,9 +195,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               Container(
-                child: !product.isFavorite
+                child: cart.quantityProduct(product.id) < 1
                     ? ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => cart.addtoCart(
+                          product.id,
+                          product.title,
+                          product.imageUrl,
+                          product.price,
+                          product.backgroundcolor,
+                        ),
                         child: const Text(
                           "Savatchaga qo'shish",
                           style: TextStyle(
@@ -218,15 +216,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       )
                     : ElevatedButton.icon(
-                        onPressed: () {
-                          cart.addtoCart(
-                            product.id,
-                            product.title,
-                            product.imageUrl,
-                            product.price,
-                            product.backgroundcolor,
-                          );
-                        },
+                        onPressed: () => Navigator.of(context)
+                            .pushNamed(CartScreen.routName),
                         icon: const Icon(
                           Icons.shopping_bag_outlined,
                           size: 14,
