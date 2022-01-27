@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:relax_shop/models/product.dart';
+import 'package:provider/provider.dart';
+
+import '../models/product.dart';
+import '../providers/products.dart';
 
 class EditProuductScreen extends StatefulWidget {
   const EditProuductScreen({Key? key}) : super(key: key);
@@ -13,6 +16,7 @@ class EditProuductScreen extends StatefulWidget {
 
 class _EditProuductScreenState extends State<EditProuductScreen> {
   final _form = GlobalKey<FormState>();
+  final _imageForm = GlobalKey<FormState>();
 
   var _product = Product(
     id: '',
@@ -28,6 +32,25 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
   final _priceFocus = FocusNode();
   final _descriptionFocus = FocusNode();
   final _saleFocus = FocusNode();
+
+  var _hasImage = true;
+  var _init = true;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (_init) {
+      final productId = ModalRoute.of(context)!.settings.arguments;
+      if (productId != null) {
+        final _editingProduct =
+            Provider.of<Products>(context).findById(productId as String);
+        _product = _editingProduct;
+      }
+    }
+
+    _init = false;
+  }
 
   @override
   void dispose() {
@@ -48,12 +71,21 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
         return AlertDialog(
           title: const Text('Rasm linkini kiriting!'),
           content: Form(
+            key: _imageForm,
             child: TextFormField(
+              initialValue: _product.imageUrl,
               decoration: const InputDecoration(
                 labelText: 'Rasm URL',
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.url,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Iltimos, rasm URL kiriting';
+                } else if (!value.startsWith('http')) {
+                  return 'Iltimos, to\'g\'ri rasm URL kiriting';
+                }
+              },
               onSaved: (newValue) {
                 _product = Product(
                   id: _product.id,
@@ -64,6 +96,7 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                   isNew: _product.isNew,
                   sale: _product.sale,
                   backgroundcolor: _product.backgroundcolor,
+                  isFavorite: _product.isFavorite,
                 );
               },
             ),
@@ -74,7 +107,7 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
               child: const Text('BEKOR QILISH'),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _saveImageForm,
               child: const Text('SAQLASH'),
             ),
           ],
@@ -83,8 +116,33 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
     );
   }
 
+  void _saveImageForm() {
+    final _isValid = _imageForm.currentState!.validate();
+    if (_isValid) {
+      _imageForm.currentState!.save();
+      Navigator.of(context).pop();
+      setState(() {
+        _hasImage = true;
+      });
+    }
+  }
+
   void _saveForm() {
-    _form.currentState!.save();
+    FocusScope.of(context).unfocus();
+    final isValid = _form.currentState!.validate();
+    setState(() {
+      _hasImage = _product.imageUrl.isNotEmpty;
+    });
+    if (isValid && _hasImage) {
+      _form.currentState!.save();
+      if (_product.id.isEmpty) {
+        Provider.of<Products>(context, listen: false).addProduct(_product);
+      } else {
+        Provider.of<Products>(context, listen: false).updateProduct(_product);
+      }
+
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -92,7 +150,9 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Mahsulotni qo'shish"),
+        title: _product.id.isEmpty
+            ? const Text("Mahsulotni qo'shish")
+            : const Text("Mahsulotni tahrirlash"),
         actions: [
           IconButton(
             onPressed: _saveForm,
@@ -109,12 +169,20 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
             child: Column(
               children: [
                 TextFormField(
+                  initialValue: _product.title,
                   decoration: const InputDecoration(
                     labelText: 'Nomi',
                     border: OutlineInputBorder(),
                   ),
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descriptionFocus);
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Iltimos, mahsulot nomini kiriting!';
+                    } else if (value.length < 3) {
+                      return 'Mahsulot nomi 3ta harfdan uzunroq bo\'lishi kerak';
+                    }
                   },
                   onSaved: (newValue) {
                     _product = Product(
@@ -126,11 +194,13 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                       isNew: _product.isNew,
                       sale: _product.sale,
                       backgroundcolor: _product.backgroundcolor,
+                      isFavorite: _product.isFavorite,
                     );
                   },
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
+                  initialValue: _product.argument,
                   decoration: const InputDecoration(
                     labelText: 'Qo\'shimcha ma\'lumot',
                     border: OutlineInputBorder(),
@@ -139,6 +209,13 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                   maxLines: 5,
                   focusNode: _descriptionFocus,
                   keyboardType: TextInputType.multiline,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Iltimos, tavsifini kiriting!';
+                    } else if (value.length < 10) {
+                      return 'Mahsulot tavsifi 10ta harfdan uzunroq bo\'lishi kerak';
+                    }
+                  },
                   onSaved: (newValue) {
                     _product = Product(
                       id: _product.id,
@@ -149,11 +226,14 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                       isNew: _product.isNew,
                       sale: _product.sale,
                       backgroundcolor: _product.backgroundcolor,
+                      isFavorite: _product.isFavorite,
                     );
                   },
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
+                  initialValue:
+                      _product.price == 0 ? '' : _product.price.toString(),
                   decoration: const InputDecoration(
                     labelText: 'Narxi',
                     border: OutlineInputBorder(),
@@ -162,6 +242,15 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                   focusNode: _priceFocus,
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_saleFocus);
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Iltimos, mahsulot narxini kiriting!';
+                    } else if (double.tryParse(value) == null) {
+                      return 'Baraka topgur dasturchilarni qiynamanglar unaqa ¯\\_(ツ)_/¯';
+                    } else if (double.parse(value) < 1) {
+                      return 'Mahsulot narxi 0dan katta bo\'lishi kerak';
+                    }
                   },
                   onSaved: (newValue) {
                     _product = Product(
@@ -173,11 +262,14 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                       isNew: _product.isNew,
                       sale: _product.sale,
                       backgroundcolor: _product.backgroundcolor,
+                      isFavorite: _product.isFavorite,
                     );
                   },
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
+                  initialValue:
+                      _product.sale == 0 ? '' : _product.sale.toString(),
                   decoration: const InputDecoration(
                     labelText: 'Chegirma %',
                     border: OutlineInputBorder(),
@@ -192,8 +284,9 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                       argument: _product.argument,
                       price: _product.price,
                       isNew: _product.isNew,
-                      sale: int.parse(newValue!),
+                      sale: newValue!.isEmpty ? 0 : int.parse(newValue),
                       backgroundcolor: _product.backgroundcolor,
+                      isFavorite: _product.isFavorite,
                     );
                   },
                 ),
@@ -215,6 +308,7 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                               isNew: !_product.isNew,
                               sale: _product.sale,
                               backgroundcolor: _product.backgroundcolor,
+                              isFavorite: _product.isFavorite,
                             );
                           },
                         );
@@ -234,7 +328,7 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                             return AlertDialog(
                               content: SingleChildScrollView(
                                 child: ColorPicker(
-                                  pickerColor: _pickerColor,
+                                  pickerColor: _product.backgroundcolor,
                                   onColorChanged: (Color color) {
                                     setState(() => _pickerColor = color);
                                   },
@@ -255,6 +349,7 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                                           isNew: _product.isNew,
                                           sale: _product.sale,
                                           backgroundcolor: _selectedColor,
+                                          isFavorite: _product.isFavorite,
                                         );
                                       },
                                     );
@@ -300,21 +395,35 @@ class _EditProuductScreenState extends State<EditProuductScreen> {
                   margin: const EdgeInsets.all(0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5),
-                    side: const BorderSide(
-                      color: Colors.grey,
+                    side: BorderSide(
+                      color: _hasImage
+                          ? Colors.grey
+                          : Theme.of(context).errorColor,
                     ),
                   ),
                   child: InkWell(
                     onTap: () => _showImageDialog(context),
+                    borderRadius: BorderRadius.circular(5),
                     splashColor:
                         Theme.of(context).primaryColor.withOpacity(0.5),
                     highlightColor: Colors.transparent,
                     child: Container(
-                      height: 180,
+                      height: 250,
                       width: double.infinity,
                       alignment: Alignment.center,
-                      child: const Text(
-                          'Asosiy rasm linkini qo\'ying (png formatda)!'),
+                      child: _product.imageUrl.isEmpty
+                          ? Text(
+                              'Asosiy rasm linkini qo\'ying (png formatda)!',
+                              style: TextStyle(
+                                color: !_hasImage
+                                    ? Theme.of(context).errorColor
+                                    : Colors.black,
+                              ),
+                            )
+                          : Image.network(
+                              _product.imageUrl,
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
                 ),
