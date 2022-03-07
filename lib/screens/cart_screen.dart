@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
 import '../providers/orders.dart';
+import '../screens/orders_screen.dart';
 
 import '../widgets/cart_list_item.dart';
 
@@ -10,6 +11,7 @@ class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
 
   static const routName = '/cart';
+  
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
@@ -100,27 +102,58 @@ class CartScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Provider.of<Orders>(context, listen: false).addToOrders(
-                      cart.items.values.toList(),
-                      cart.totalPrice,
-                    );
-                    cart.removeItems();
-                  },
-                  child: Text(
-                    "Xarid qilish \$${cart.totalPrice.toStringAsFixed(2)}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                  ),
-                ),
+                OrderButton(cart: cart),
               ],
             ),
           ),
         ));
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.cart,
+  }) : super(key: key);
+
+  final Cart cart;
+
+  @override
+  State<OrderButton> createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: (widget.cart.items.isEmpty || _isLoading)
+          ? null
+          : () async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Provider.of<Orders>(context, listen: false).addToOrders(
+                widget.cart.items.values.toList(),
+                widget.cart.totalPrice,
+              );
+              setState(() {
+                _isLoading = false;
+              });
+              widget.cart.removeItems();
+              Navigator.of(context).pushReplacementNamed(OrdersScreen.routName);
+            },
+      child: _isLoading
+          ? const CircularProgressIndicator()
+          : Text(
+              "Xarid qilish \$${widget.cart.totalPrice.toStringAsFixed(2)}",
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+      style: ElevatedButton.styleFrom(
+        primary: Colors.black,
+      ),
+    );
   }
 }

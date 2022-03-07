@@ -29,7 +29,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Container(
             padding: const EdgeInsets.only(top: 15, bottom: 20),
             height: 350,
-            color: product.backgroundcolor,
+            color: Color.fromARGB(
+                product.backgroundcolora,
+                product.backgroundcolorr,
+                product.backgroundcolorg,
+                product.backgroundcolorb),
             child: GridTile(
               header: Container(
                 margin: const EdgeInsets.only(top: 50),
@@ -92,7 +96,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         product.title,
                         product.imageUrl,
                         product.price,
-                        product.backgroundcolor,
+                        Color.fromARGB(
+                            product.backgroundcolora,
+                            product.backgroundcolorr,
+                            product.backgroundcolorg,
+                            product.backgroundcolorb),
                       ),
                       icon: const Icon(
                         Icons.add_circle,
@@ -105,7 +113,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
           Container(
-            color: product.backgroundcolor,
+            color: Color.fromARGB(
+                product.backgroundcolora,
+                product.backgroundcolorr,
+                product.backgroundcolorg,
+                product.backgroundcolorb),
             child: Container(
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -202,7 +214,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           product.title,
                           product.imageUrl,
                           product.price,
-                          product.backgroundcolor,
+                          Color.fromARGB(
+                              product.backgroundcolora,
+                              product.backgroundcolorr,
+                              product.backgroundcolorg,
+                              product.backgroundcolorb),
                         ),
                         child: const Text(
                           "Savatchaga qo'shish",

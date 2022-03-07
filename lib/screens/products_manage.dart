@@ -13,6 +13,10 @@ class ManageProducts extends StatelessWidget {
 
   static const routName = "/manage-products";
 
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<Products>(context).getProductsFromFirebase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<Products>(context);
@@ -29,15 +33,18 @@ class ManageProducts extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ListView.builder(
-        itemCount: productProvider.list.length,
-        itemBuilder: (ctx, index) {
-          final product = productProvider.list[index];
-          return ChangeNotifierProvider.value(
-            value: product,
-            child: const UserProductItem(),
-          );
-        },
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: ListView.builder(
+          itemCount: productProvider.list.length,
+          itemBuilder: (ctx, index) {
+            final product = productProvider.list[index];
+            return ChangeNotifierProvider.value(
+              value: product,
+              child: const UserProductItem(),
+            );
+          },
+        ),
       ),
     );
   }

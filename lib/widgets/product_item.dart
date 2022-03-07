@@ -30,7 +30,11 @@ class ProductItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: product.backgroundcolor,
+        color: Color.fromARGB(
+            product.backgroundcolora,
+            product.backgroundcolorr,
+            product.backgroundcolorg,
+            product.backgroundcolorb),
         borderRadius: BorderRadius.circular(15),
       ),
       child: GestureDetector(
@@ -62,7 +66,11 @@ class ProductItem extends StatelessWidget {
                       child: Text(
                         "${product.sale}% chegirma",
                         style: TextStyle(
-                          color: product.backgroundcolor,
+                          color: Color.fromARGB(
+                              product.backgroundcolora,
+                              product.backgroundcolorr,
+                              product.backgroundcolorg,
+                              product.backgroundcolorb),
                         ),
                       ),
                     )
@@ -77,7 +85,11 @@ class ProductItem extends StatelessWidget {
                       child: Text(
                         "Yangi",
                         style: TextStyle(
-                          color: product.backgroundcolor,
+                          color: Color.fromARGB(
+                              product.backgroundcolora,
+                              product.backgroundcolorr,
+                              product.backgroundcolorg,
+                              product.backgroundcolorb),
                         ),
                       ),
                     )
@@ -136,7 +148,11 @@ class ProductItem extends StatelessWidget {
                       product.title,
                       product.imageUrl,
                       product.price,
-                      product.backgroundcolor,
+                      Color.fromARGB(
+                          product.backgroundcolora,
+                          product.backgroundcolorr,
+                          product.backgroundcolorg,
+                          product.backgroundcolorb),
                     );
                   },
                   icon: const Icon(

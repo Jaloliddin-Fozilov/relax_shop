@@ -11,7 +11,7 @@ import './screens/home_screen.dart';
 import './screens/cart_screen.dart';
 import './screens/orders_screen.dart';
 import './screens/edit_product_screen.dart';
-import './screens/products_manage.dart';
+import 'screens/products_manage.dart';
 
 void main() {
   runApp(const MyApp());
